@@ -166,6 +166,46 @@ class TableofaGame(object):
             self.board[starting_point+nr_of_steps][0]=colour
             self.board[starting_point+nr_of_steps][1]+=1
         
+    def CountCheckers(self, colour='both', area='complete'):
+        '''input: 
+            str: colour - of checker which shall be counted (default 'both', alternatively 'b' or 'r')
+                 area - where to count (default 'complete', alternatively 'home_red' or 'home_blue')
+                 nr_of_steps - number of steps for the movement, between 1 and 6
+            returns: int - count
+        '''    
+        # set counts to 0
+        count=0
+        count_b=0
+        count_r=0
+       
+        # define range object
+        if area=='complete':
+            range_obj = range(1,25)
+        elif area=='home_red':
+            range_obj = range(1,7)   # red home is upper right corner, i.e. points 1 to 6
+        else:
+            range_obj = range(19,25)    # blue home is lower right corner, i.e. points 19 to 24
+      
+        # count   
+        for i in range_obj:
+            if self.board[i][0]=='r':
+                count_r += self.board[i][1]
+            elif self.board[i][0]=='b':
+                count_b += self.board[i][1]
+        
+        # get the right count
+        if colour=='both':
+            count = count_r + count_b
+        elif colour=='r':
+            count = count_r
+        else:
+            count = count_b 
+        
+        return count
+        
+        
+        
+        
 # %% trying out methods of class              
 game=TableofaGame()
 #game.ShowTable()
@@ -177,3 +217,7 @@ game.ShowTable()
 print(game.PossibleMoves('b',2))
 print(game.PossibleMoves('b',1))
 print(game.PossibleMoves('r',1))
+print(game.CountCheckers())
+print(game.CountCheckers(colour='r',area='complete'))
+print(game.CountCheckers(colour='r'))
+print(game.CountCheckers(area='home_red'))
